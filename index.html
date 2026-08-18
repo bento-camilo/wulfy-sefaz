@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wulfy Fiscal</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --panel-soft: #f8fafb;
+      --line: #d9e0e7;
+      --line-strong: #bec9d4;
+      --text: #17212b;
+      --muted: #667482;
+      --brand: #075985;
+      --brand-hover: #0c4a6e;
+      --success: #18794e;
+      --danger: #b42318;
+      --warning: #9a6700;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 32px 40px;
+    }
+
+    .hero {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .title {
+      margin: 0 0 5px;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border: 1px solid #a7d7c1;
+      background: #edf8f2;
+      border-radius: 6px;
+      color: #17603f;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge::before {
+      width: 7px;
+      height: 7px;
+      background: #21a366;
+      border-radius: 50%;
+      content: "";
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(340px, 420px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 20px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(23, 33, 43, 0.04);
+    }
+
+    .card h2 {
+      margin: 0 0 18px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .field { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #344250;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    input, textarea, button { font: inherit; }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px 11px;
+      outline: none;
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      font-size: 13px;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
+    }
+
+    textarea {
+      min-height: 108px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 150px;
+      gap: 12px;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    button {
+      min-height: 38px;
+      padding: 9px 13px;
+      cursor: pointer;
+      color: #344250;
+      background: #fff;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background .15s ease, border-color .15s ease;
+    }
+
+    button:hover { background: #f3f6f8; }
+    button:focus-visible { outline: 3px solid rgba(2, 132, 199, .2); outline-offset: 1px; }
+    button:disabled { cursor: wait; opacity: .65; }
+
+    .primary { color: #fff; background: var(--brand); border-color: var(--brand); }
+    .primary:hover { background: var(--brand-hover); }
+    .success { color: #17603f; background: #edf8f2; border-color: #a7d7c1; }
+    .success:hover { background: #e2f3ea; }
+    .ghost { color: #344250; background: #fff; }
+    .danger { color: #fff; background: var(--danger); border-color: var(--danger); }
+
+    .status {
+      min-height: 42px;
+      margin-top: 16px;
+      padding: 10px 12px;
+      white-space: pre-wrap;
+      color: var(--muted);
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-left: 3px solid #8795a1;
+      border-radius: 6px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .status.ok { color: #17603f; background: #f0f9f4; border-color: #a7d7c1; border-left-color: var(--success); }
+    .status.err { color: #8f1d18; background: #fff4f2; border-color: #f1b5af; border-left-color: var(--danger); }
+    .status.warn { color: #7a5200; background: #fff9e8; border-color: #ead28b; border-left-color: var(--warning); }
+
+    table {
+      width: 100%;
+      margin-top: 8px;
+      border: 1px solid var(--line);
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 9px 11px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    tr:last-child th, tr:last-child td { border-bottom: 0; }
+
+    th {
+      width: 210px;
+      color: #52616f;
+      background: var(--panel-soft);
+      font-weight: 600;
+    }
+
+    td {
+      color: var(--text);
+      background: #fff;
+      word-break: break-word;
+    }
+
+    .products-view, .sheet-block { margin-top: 18px; }
+
+    .products-lines {
+      min-height: 48px;
+      margin-top: 6px;
+      padding: 11px 13px;
+      white-space: pre-line;
+      color: var(--text);
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.7;
+      word-break: break-word;
+    }
+
+    pre {
+      max-height: 300px;
+      margin: 6px 0 0;
+      padding: 13px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #174e35;
+      background: #f4f8f6;
+      border: 1px solid #cbded4;
+      border-radius: 6px;
+      font: 12px/1.55 Consolas, Monaco, "Courier New", monospace;
+    }
+
+    .muted, .footer-note {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .small {
+      color: #52616f;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+      gap: 18px;
+    }
+
+    .sheet-output {
+      min-height: 88px;
+      white-space: pre;
+      font-family: Consolas, Monaco, "Courier New", monospace;
+      font-size: 12px;
+    }
+
+    @media (max-width: 1120px) {
+      .grid { grid-template-columns: 360px minmax(0, 1fr); }
+      .split { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 780px) {
+      .wrap { padding: 20px 14px 28px; }
+      .hero { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .grid, .row { grid-template-columns: 1fr; }
+      .card { padding: 16px; }
+      .buttons button { flex: 1 1 calc(50% - 4px); }
+      th { width: 40%; }
+    }
+
+    @media (max-width: 480px) {
+      th, td { padding: 8px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1 class="title">Wulfy Fiscal</h1>
+        <p class="subtitle">
+          Cole a URL do QR code, eu chamo a API do n8n e mostro o retorno já organizado.
+        </p>
+      </div>
+      <div class="badge">API: <span id="api-label">prod</span></div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Consulta</h2>
+
+        <div class="field">
+          <label for="apiBase">Base da API</label>
+          <input id="apiBase" type="text" value="https://api.wulfy.ddns.net/webhook/nfce-qr-sefaz" />
+          <div class="muted">Se quiser testar, troque para <code>/webhook-test/</code>.</div>
+        </div>
+
+        <div class="field">
+          <label for="qrUrl">QR URL</label>
+          <textarea id="qrUrl" placeholder="Cole aqui a URL do QR code da NFC-e"></textarea>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="extra">Observação opcional</label>
+            <input id="extra" type="text" placeholder="Ex.: teste manual" />
+          </div>
+          <div class="field">
+            <label for="quantity">Quantidade de almoços</label>
+            <input id="quantity" type="number" min="1" step="1" placeholder="2" />
+            <div class="muted">Esse valor é enviado para a API e usado no cálculo do almoço.</div>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button class="primary" id="btnConsultar">Consultar API</button>
+          <button class="ghost" id="btnExemplo" type="button">Carregar exemplo</button>
+          <button class="success" id="btnCopiarUrl" type="button">Copiar URL</button>
+          <button class="ghost" id="btnLimpar" type="button">Limpar</button>
+        </div>
+
+        <div id="status" class="status">Pronto para consultar.</div>
+        <div class="footer-note">
+          Se o navegador bloquear a chamada por CORS, o HTML ainda está certo — aí o próximo passo é servir essa página no mesmo domínio da API ou colocar um pequeno proxy.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Resposta</h2>
+        <div class="split">
+          <div>
+            <div class="small">Tabela da resposta</div>
+            <table id="resultTable">
+              <tbody>
+                <tr><th>Emissão</th><td id="out-emissao">—</td></tr>
+                <tr><th>Razão Social do Fornecedor</th><td id="out-razao-social-fornecedor">—</td></tr>
+                <tr><th>Estabelecimento</th><td id="out-estabelecimento">—</td></tr>
+                <tr><th>Produtos</th><td id="out-produtos">—</td></tr>
+                <tr><th>Tipo</th><td id="out-tipo">—</td></tr>
+                <tr><th>Forma PGTO</th><td id="out-forma-pgto">—</td></tr>
+                <tr><th>N°NFE</th><td id="out-nfe">—</td></tr>
+                <tr><th>Valor</th><td id="out-valor">—</td></tr>
+                <tr><th>Unidade</th><td id="out-unidade">—</td></tr>
+                <tr><th>Natureza do Serviço</th><td id="out-natureza-servico">—</td></tr>
+                <tr><th>Quantidade</th><td id="out-quantidade">—</td></tr>
+              </tbody>
+            </table>
+            <div class="products-view">
+              <div class="small">Produtos por linha</div>
+              <div id="productsLines" class="products-lines">—</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="small">JSON bruto</div>
+            <pre id="rawJson">{}</pre>
+            <div class="buttons" style="margin-top: 10px;">
+              <button class="success" id="btnCopiarJson" type="button">Copiar JSON</button>
+            </div>
+
+            <div class="sheet-block">
+              <div class="small">Linha para planilha</div>
+              <textarea id="sheetLine" class="sheet-output" placeholder="A linha vai aparecer aqui depois da consulta."></textarea>
+              <div class="muted">
+                Ordem: Emissão, Razão Social do Fornecedor, Tipo, Forma PGTO, N°NFE, Valor, Unidade, Natureza do Serviço, Quantidade, Valor Real Soma 35.
+                Campos ausentes ficam em branco. Natureza do Serviço usa Compra como padrão.
+              </div>
+              <div class="buttons" style="margin-top: 10px;">
+                <button class="success" id="btnCopiarLinha" type="button">Copiar linha</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const FIELD_ORDER = [
+      { key: 'Emissão', id: 'out-emissao' },
+      { key: 'Razão Social do Fornecedor', id: 'out-razao-social-fornecedor' },
+      { key: 'Estabelecimento', id: 'out-estabelecimento' },
+      { key: 'Produtos', id: 'out-produtos' },
+      { key: 'Tipo', id: 'out-tipo' },
+      { key: 'Forma PGTO', id: 'out-forma-pgto' },
+      { key: 'N°NFE', id: 'out-nfe' },
+      { key: 'Valor', id: 'out-valor' },
+      { key: 'Unidade', id: 'out-unidade' },
+      { key: 'Natureza do Serviço', id: 'out-natureza-servico' },
+      { key: 'Quantidade', id: 'out-quantidade' },
+    ];
+
+    const DEFAULT_API = 'https://api.wulfy.ddns.net/webhook/nfce-qr-sefaz';
+    const DEFAULT_NATUREZA = 'Compra';
+    const SAMPLE_QR = 'http://www.fazenda.pr.gov.br/nfce/qrcode?p=41260725220702000101650010001774001801230003|2|1|1|EC142EA2F05855608F529201799A1C88664E6007';
+
+    const apiBaseEl = document.getElementById('apiBase');
+    const qrUrlEl = document.getElementById('qrUrl');
+    const extraEl = document.getElementById('extra');
+    const quantityEl = document.getElementById('quantity');
+    const statusEl = document.getElementById('status');
+    const rawJsonEl = document.getElementById('rawJson');
+    const sheetLineEl = document.getElementById('sheetLine');
+    const productsLinesEl = document.getElementById('productsLines');
+    const apiLabelEl = document.getElementById('api-label');
+    const btnConsultar = document.getElementById('btnConsultar');
+    const btnExemplo = document.getElementById('btnExemplo');
+    const btnLimpar = document.getElementById('btnLimpar');
+    const btnCopiarUrl = document.getElementById('btnCopiarUrl');
+    const btnCopiarJson = document.getElementById('btnCopiarJson');
+    const btnCopiarLinha = document.getElementById('btnCopiarLinha');
+
+    let lastJson = null;
+    let lastRow = null;
+
+    const setStatus = (message, kind = '') => {
+      statusEl.className = 'status' + (kind ? ' ' + kind : '');
+      statusEl.textContent = message;
+    };
+
+    const setLoading = (isLoading) => {
+      btnConsultar.disabled = isLoading;
+      btnConsultar.textContent = isLoading ? 'Consultando...' : 'Consultar API';
+    };
+
+    const getApiBase = () => (apiBaseEl.value.trim() || DEFAULT_API).replace(/\/+$/, '');
+
+    const getResponseRow = (data) => {
+      if (!data || typeof data !== 'object' || Array.isArray(data)) {
+        return {};
+      }
+
+      return data.tabela && typeof data.tabela === 'object' ? data.tabela : data;
+    };
+
+    const textOf = (value) => {
+      if (value === null || value === undefined) {
+        return '';
+      }
+
+      const text = String(value).trim();
+      return text === '—' ? '' : text;
+    };
+
+    const pickText = (row, keys) => {
+      for (const key of keys) {
+        if (Object.prototype.hasOwnProperty.call(row, key)) {
+          const text = textOf(row[key]);
+          if (text) {
+            return text;
+          }
+        }
+      }
+
+      return '';
+    };
+
+    const parseMoney = (value) => {
+      const text = textOf(value);
+      if (!text) {
+        return NaN;
+      }
+
+      const cleaned = text
+        .replace(/\s/g, '')
+        .replace(/R\$/gi, '')
+        .replace(/\./g, '')
+        .replace(',', '.')
+        .replace(/[^0-9.-]/g, '');
+
+      const amount = Number(cleaned);
+      return Number.isFinite(amount) ? amount : NaN;
+    };
+
+    const parseQuantity = (value) => {
+      const text = textOf(value);
+      if (!text) {
+        return NaN;
+      }
+
+      const cleaned = text
+        .replace(/\s/g, '')
+        .replace(/\./g, '')
+        .replace(',', '.')
+        .replace(/[^0-9.-]/g, '');
+
+      const amount = Number(cleaned);
+      return Number.isFinite(amount) ? amount : NaN;
+    };
+
+    const formatMoney = (value) => {
+      if (!Number.isFinite(value)) {
+        return '';
+      }
+
+      return 'R$ ' + value.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    };
+
+    const computeValorPlanilha = (valor, quantidade) => {
+      const amount = parseMoney(valor);
+      const qty = parseQuantity(quantidade);
+
+      if (!Number.isFinite(amount) || !Number.isFinite(qty) || qty <= 0) {
+        return '';
+      }
+
+      return formatMoney(Math.min(amount, qty * 35));
+    };
+
+    const buildUrl = () => {
+      const qr = qrUrlEl.value.trim();
+      const apiBase = getApiBase();
+      const url = new URL(apiBase);
+      url.searchParams.set('qr_url', qr);
+
+      const quantity = quantityEl.value.trim();
+      if (quantity) {
+        url.searchParams.set('quantidade', quantity);
+      }
+
+      const extra = extraEl.value.trim();
+      if (extra) {
+        url.searchParams.set('observacao', extra);
+      }
+
+      return url.toString();
+    };
+
+    const buildSheetLine = (row) => {
+      const values = [
+        pickText(row, ['Emissão', 'Emissao']),
+        pickText(row, ['Razão Social do Fornecedor', 'Razao Social do Fornecedor']),
+        pickText(row, ['Tipo']),
+        pickText(row, ['Forma PGTO']),
+        pickText(row, ['N°NFE', 'NºNFE', 'Numero', 'Número', 'NFE', 'numero']),
+        pickText(row, ['Valor', 'valor']),
+        pickText(row, ['Unidade']),
+        DEFAULT_NATUREZA,
+        pickText(row, ['Quantidade', 'quantidade']),
+        computeValorPlanilha(
+          pickText(row, ['Valor', 'valor']),
+          pickText(row, ['Quantidade', 'quantidade'])
+        ),
+      ];
+
+      return values.map((item) => textOf(item)).join('\t');
+    };
+
+    const updateSheetLine = (row) => {
+      if (!sheetLineEl) {
+        return;
+      }
+
+      sheetLineEl.value = row ? buildSheetLine(row) : '';
+    };
+
+    const renderResult = (data) => {
+      const row = getResponseRow(data);
+
+      FIELD_ORDER.forEach(({ key, id }) => {
+        const el = document.getElementById(id);
+        if (el) {
+          const value = row[key];
+          el.textContent = (value === null || value === undefined || value === '') ? '—' : String(value);
+        }
+      });
+
+      rawJsonEl.textContent = JSON.stringify(data, null, 2);
+      const products = pickText(row, ['Produtos', 'produtos']);
+      productsLinesEl.textContent = products
+        ? products.split(/\s*\|\s*/).filter(Boolean).join('\n')
+        : '—';
+      updateSheetLine(row);
+      lastJson = data;
+      lastRow = row;
+    };
+
+    const fetchResult = async () => {
+      const qr = qrUrlEl.value.trim();
+      if (!qr) {
+        setStatus('Cole uma URL de QR antes de consultar.', 'warn');
+        return;
+      }
+
+      const url = buildUrl();
+      apiLabelEl.textContent = apiBaseEl.value.includes('webhook-test') ? 'teste' : 'prod';
+      setLoading(true);
+      setStatus('Consultando a API...', '');
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+
+        const contentType = response.headers.get('content-type') || '';
+        const payload = contentType.includes('application/json')
+          ? await response.json()
+          : await response.text();
+
+        if (!response.ok) {
+          const message = typeof payload === 'string' ? payload : JSON.stringify(payload);
+          throw new Error('HTTP ' + response.status + ': ' + message);
+        }
+
+        renderResult(payload);
+        setStatus('Consulta concluída com sucesso.', 'ok');
+      } catch (err) {
+        console.error(err);
+        setStatus(
+          'Falha na consulta. Se o erro for de CORS, sirva este HTML no mesmo domínio da API ou use um proxy.\n\n' + err.message,
+          'err'
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    btnConsultar.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      fetchResult();
+    });
+
+    btnExemplo.addEventListener('click', () => {
+      apiBaseEl.value = DEFAULT_API;
+      qrUrlEl.value = SAMPLE_QR;
+      quantityEl.value = '2';
+      extraEl.value = '';
+      apiLabelEl.textContent = 'prod';
+      setStatus('Exemplo carregado. Clique em Consultar API.', '');
+    });
+
+    btnLimpar.addEventListener('click', () => {
+      qrUrlEl.value = '';
+      quantityEl.value = '';
+      extraEl.value = '';
+      rawJsonEl.textContent = '{}';
+      if (sheetLineEl) {
+        sheetLineEl.value = '';
+      }
+      productsLinesEl.textContent = '—';
+      lastJson = null;
+      lastRow = null;
+      FIELD_ORDER.forEach(({ id }) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '—';
+      });
+      setStatus('Campos limpos.', '');
+    });
+
+    btnCopiarUrl.addEventListener('click', async () => {
+      try {
+        const url = buildUrl();
+        await navigator.clipboard.writeText(url);
+        setStatus('URL copiada para a área de transferência.', 'ok');
+      } catch (err) {
+        setStatus('Não consegui copiar a URL automaticamente. ' + err.message, 'warn');
+      }
+    });
+
+    btnCopiarJson.addEventListener('click', async () => {
+      try {
+        const text = lastJson ? JSON.stringify(lastJson, null, 2) : rawJsonEl.textContent || '{}';
+        await navigator.clipboard.writeText(text);
+        setStatus('JSON copiado para a área de transferência.', 'ok');
+      } catch (err) {
+        setStatus('Não consegui copiar o JSON automaticamente. ' + err.message, 'warn');
+      }
+    });
+
+    btnCopiarLinha.addEventListener('click', async () => {
+      try {
+        const text = sheetLineEl && sheetLineEl.value
+          ? sheetLineEl.value
+          : (lastRow ? buildSheetLine(lastRow) : '');
+        await navigator.clipboard.writeText(text);
+        setStatus('Linha da planilha copiada para a área de transferência.', 'ok');
+      } catch (err) {
+        setStatus('Não consegui copiar a linha automaticamente. ' + err.message, 'warn');
+      }
+    });
+
+    apiBaseEl.value = DEFAULT_API;
+    setStatus('Pronto para consultar.', '');
+  </script>
+</body>
+</html>
